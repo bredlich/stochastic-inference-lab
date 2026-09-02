@@ -1,0 +1,24 @@
+name: Build Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Eigen
+        run: sudo apt-get update && sudo apt-get install -y libeigen3-dev
+      - name: Build all project subfolders
+        run: |
+          for dir in */; do
+            if [ -f "${dir}CMakeLists.txt" ]; then
+              echo "Building $dir"
+              cmake -S "$dir" -B "${dir}build"
+              cmake --build "${dir}build"
+            fi
+          done
