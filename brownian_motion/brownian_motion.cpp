@@ -1,11 +1,15 @@
 // Standard brownian motion path generator
 // Simulates one or more Wiener process paths using Gaussian increments
 // Date: 02/09/2026
+//
+// Update: 03/09/2026 - Updating to accept numPaths and n as command-line
+// arguments so parameters can be swept externally via run_experiments.sh
 
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <random>
+#include <cstdlib> // for std::atoi
 
 // Simulates one Brownian motion path over [0, T] with n steps
 std::vector<double> simulateBrownianPath(double T, int n, std::mt19937& gen) {
@@ -26,13 +30,22 @@ std::vector<double> simulateBrownianPath(double T, int n, std::mt19937& gen) {
     return path;
 }
 
-int main() {
+int main(int argc, char* argv[]) {
     std::random_device rd;
     std::mt19937 gen(rd());
 
     double T = 1.0;      // simulate over the interval [0, 1]
-    int n = 500;          // number of time steps
-    int numPaths = 5;     // simulate several paths to see the variability
+
+    // Default values, overridden if provided on the command line
+    int numPaths = 5;
+    int n = 500;
+
+    if (argc >= 2) {
+        numPaths = std::atoi(argv[1]);
+    }
+    if (argc >= 3) {
+        n = std::atoi(argv[2]);
+    }
 
     std::ofstream outFile("brownian_paths.csv");
     if (!outFile.is_open()) {
