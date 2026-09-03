@@ -22,3 +22,11 @@ jobs:
               cmake --build "${dir}build"
             fi
           done
+      - name: Run all test executables
+        run: |
+          for exe in */build/*_tests; do
+            if [ -f "$exe" ]; then
+              echo "Running $exe"
+              "$exe"
+            fi
+          done

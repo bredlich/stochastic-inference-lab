@@ -13,25 +13,7 @@
 #include <vector>
 #include <random>
 #include <cstdlib> // for std::atoi
-
-// Simulates one Brownian motion path over [0, T] with n steps
-std::vector<double> simulateBrownianPath(double T, int n, std::mt19937& gen) {
-    double dt = T / n; // size of each time step
-    double stdDev = std::sqrt(dt); // increment std dev scales with sqrt(dt)
-
-    std::normal_distribution<double> gaussian(0.0, stdDev);
-
-    std::vector<double> path;
-    path.push_back(0.0); // starting point at 0
-
-    double current = 0.0;
-    for (int i = 0; i < n; i++) {
-        current += gaussian(gen); // add a random increment
-        path.push_back(current);
-    }
-
-    return path;
-}
+#include "brownian_motion.h"
 
 int main(int argc, char* argv[]) {
     std::random_device rd;
