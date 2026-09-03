@@ -4,6 +4,9 @@
 //
 // Update: 03/09/2026 - Updating to accept numPaths and n as command-line
 // arguments so parameters can be swept externally via run_experiments.sh
+//
+// Update: 03/09/2026 - Adding an optional fixed seed argument for
+// reproducibility, so a specific run's exact output can be regenerated
 
 #include <iostream>
 #include <fstream>
@@ -32,7 +35,7 @@ std::vector<double> simulateBrownianPath(double T, int n, std::mt19937& gen) {
 
 int main(int argc, char* argv[]) {
     std::random_device rd;
-    std::mt19937 gen(rd());
+    unsigned int seed = rd(); // genuinely random by default
 
     double T = 1.0;      // simulate over the interval [0, 1]
 
@@ -46,6 +49,11 @@ int main(int argc, char* argv[]) {
     if (argc >= 3) {
         n = std::atoi(argv[2]);
     }
+    if (argc >= 4) {
+        seed = static_cast<unsigned int>(std::atoi(argv[3])); // fixed seed overrides random one
+    }
+
+    std::mt19937 gen(seed);
 
     std::ofstream outFile("brownian_paths.csv");
     if (!outFile.is_open()) {
