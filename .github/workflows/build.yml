@@ -18,7 +18,7 @@ jobs:
           for dir in */; do
             if [ -f "${dir}CMakeLists.txt" ]; then
               echo "Building $dir"
-              cmake -S "$dir" -B "${dir}build"
+              cmake -S "$dir" -B "${dir}build" -DEIGEN_INCLUDE_DIR=/usr/include/eigen3
               cmake --build "${dir}build"
             fi
           done
