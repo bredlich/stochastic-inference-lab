@@ -22,7 +22,7 @@ A standard Brownian motion path can be thought of as a walker taking random step
 2. $B_t^H$ has stationary, but not independent, increments,
 3. $B_t^H$ is Gaussian, with covariance function
 
-$$\mathbb{E}\left[B_s^H B_t^H\right] = \frac{1}{2}\left(|s|^{2H} + |t|^{2H} - |t-s|^{2H}\right).$$
+$$\mathbb{E}\left[B_s^H \, B_t^H\right] = \frac{1}{2}\left(|s|^{2H} + |t|^{2H} - |t-s|^{2H}\right)$$
 
 **Remark 1.** When $H = 1/2$, this covariance reduces exactly to $\min(s,t)$, recovering standard Brownian motion, confirming fBm is a genuine generalisation rather than a separate process. This is verified directly in this project's test suite.
 
