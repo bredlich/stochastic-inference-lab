@@ -7,3 +7,4 @@ C++ simulations of stochastic processes. Extending my background as a statistica
 |---|---|
 | [Standard Brownian motion generator](brownian_motion/) | Simulates a Wiener process via cumulative Gaussian increments, with CLI-configurable parameters, a fixed-seed reproducibility option, Python plotting, and a shell script for parameter sweeps |
 | [Monte Carlo option pricing](monte_carlo/) | Prices a European call option on the FTSE 100 via Monte Carlo simulation of GBM paths, validated against the closed-form Black-Scholes price, with volatility estimated directly from real historical data |
+| [Fractional Brownian motion generator](fractional_brownian_motion/) | Simulates fBm via Cholesky decomposition of the covariance matrix, parameterised by the Hurst exponent, with verification that H=0.5 exactly recovers standard Brownian motion |
