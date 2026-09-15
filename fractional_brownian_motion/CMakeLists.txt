@@ -10,3 +10,13 @@ endif()
 
 add_executable(fbm fbm.cpp)
 target_include_directories(fbm PRIVATE ${EIGEN_INCLUDE_DIR})
+
+add_executable(fbm_tests
+    test_fbm.cpp
+    ../third_party/catch2/catch_amalgamated.cpp
+)
+target_include_directories(fbm_tests PRIVATE
+    ${EIGEN_INCLUDE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/../third_party/catch2
+)
