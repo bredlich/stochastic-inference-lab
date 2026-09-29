@@ -9,10 +9,49 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: ci_test_password
+          POSTGRES_DB: stochastic_lab
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      PG_CONN_STRING: "host=localhost port=5432 dbname=stochastic_lab user=postgres password=ci_test_password"
+
     steps:
       - uses: actions/checkout@v4
       - name: Install Eigen
         run: sudo apt-get update && sudo apt-get install -y libeigen3-dev
+      - name: Install libpqxx
+        run: sudo apt-get install -y libpqxx-dev
+      - name: Create database tables
+        run: |
+          PGPASSWORD=ci_test_password psql -h localhost -U postgres -d stochastic_lab -c "
+          CREATE TABLE hurst_validation_results (
+              id SERIAL PRIMARY KEY,
+              seed INTEGER,
+              true_h DOUBLE PRECISION,
+              estimated_h DOUBLE PRECISION,
+              absolute_error DOUBLE PRECISION,
+              created_at TIMESTAMP DEFAULT NOW()
+          );
+          CREATE TABLE hurst_ftse_results (
+              id SERIAL PRIMARY KEY,
+              estimated_h DOUBLE PRECISION,
+              interpretation TEXT,
+              created_at TIMESTAMP DEFAULT NOW()
+          );
+          "
       - name: Build all project subfolders
         run: |
           for dir in */; do
@@ -30,3 +69,12 @@ jobs:
               "$exe"
             fi
           done
+
+  build-cmake-demo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure and build cmake_demo
+        run: |
+          cmake -S cmake_demo -B cmake_demo/build
+          cmake --build cmake_demo/build
