@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(HurstExponentEstimation)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 if(NOT DEFINED EIGEN_INCLUDE_DIR)
@@ -20,3 +20,7 @@ target_include_directories(hurst_tests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/../third_party/catch2
 )
+
+find_package(libpqxx CONFIG REQUIRED)
+add_executable(store_hurst_results store_hurst_results.cpp)
+target_link_libraries(store_hurst_results PRIVATE libpqxx::pqxx)
