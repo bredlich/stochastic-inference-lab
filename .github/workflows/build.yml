@@ -33,7 +33,7 @@ jobs:
       - name: Install Eigen
         run: sudo apt-get update && sudo apt-get install -y libeigen3-dev
       - name: Install libpqxx
-        run: sudo apt-get install -y libpqxx-dev
+        run: sudo apt-get install -y libpqxx-dev pkg-config
       - name: Create database tables
         run: |
           PGPASSWORD=ci_test_password psql -h localhost -U postgres -d stochastic_lab -c "

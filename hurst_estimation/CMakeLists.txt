@@ -21,6 +21,19 @@ target_include_directories(hurst_tests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/../third_party/catch2
 )
 
-find_package(libpqxx CONFIG REQUIRED)
+# libpqxx: vcpkg (Windows) provides CMake config files; apt (Linux CI)
+# provides pkg-config files instead. Try CONFIG mode first, fall back
+# to pkg-config so the same CMakeLists.txt works on both.
+find_package(libpqxx CONFIG QUIET)
+
 add_executable(store_hurst_results store_hurst_results.cpp)
-target_link_libraries(store_hurst_results PRIVATE libpqxx::pqxx)
+
+if(libpqxx_FOUND)
+    target_link_libraries(store_hurst_results PRIVATE libpqxx::pqxx)
+else()
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(PQXX REQUIRED libpqxx)
+    target_include_directories(store_hurst_results PRIVATE ${PQXX_INCLUDE_DIRS})
+    target_link_libraries(store_hurst_results PRIVATE ${PQXX_LIBRARIES})
+    target_link_directories(store_hurst_results PRIVATE ${PQXX_LIBRARY_DIRS})
+endif()
