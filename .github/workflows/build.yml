@@ -30,10 +30,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
       - name: Install Eigen
         run: sudo apt-get update && sudo apt-get install -y libeigen3-dev
+
       - name: Install libpqxx
         run: sudo apt-get install -y libpqxx-dev pkg-config
+
+      - name: Install Python dependencies
+        run: pip install psycopg2-binary
+
       - name: Create database tables
         run: |
           PGPASSWORD=ci_test_password psql -h localhost -U postgres -d stochastic_lab -c "
@@ -52,6 +58,7 @@ jobs:
               created_at TIMESTAMP DEFAULT NOW()
           );
           "
+
       - name: Build all project subfolders
         run: |
           for dir in */; do
@@ -61,6 +68,13 @@ jobs:
               cmake --build "${dir}build"
             fi
           done
+
+      - name: Run Hurst estimator and load results into Postgres
+        run: |
+          cd hurst_estimation
+          ./build/hurst
+          python load_results.py
+
       - name: Run all test executables
         run: |
           for exe in */build/*_tests; do
@@ -69,12 +83,3 @@ jobs:
               "$exe"
             fi
           done
-
-  build-cmake-demo:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Configure and build cmake_demo
-        run: |
-          cmake -S cmake_demo -B cmake_demo/build
-          cmake --build cmake_demo/build

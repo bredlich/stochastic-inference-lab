@@ -21,17 +21,21 @@ target_include_directories(hurst_tests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/../third_party/catch2
 )
 
-# libpqxx: vcpkg (Windows) provides CMake config files; apt (Linux CI)
-# provides pkg-config files instead. Try CONFIG mode first, fall back
-# to pkg-config so the same CMakeLists.txt works on both.
-find_package(libpqxx CONFIG QUIET)
+# store_hurst_results (C++/libpqxx) is a Windows-local demonstration only.
+# Ubuntu's libpqxx-dev package has an ABI mismatch (undefined reference to
+# pqxx::argument_error / pqxx::conversion_error at link time) that isn't
+# fixable via CMake linking order, so it is excluded from Linux CI.
+# load_results.py (using psycopg2) does the same job cross-platform.
+if(WIN32)
+    find_package(libpqxx CONFIG QUIET)
 
-add_executable(store_hurst_results store_hurst_results.cpp)
+    add_executable(store_hurst_results store_hurst_results.cpp)
 
-if(libpqxx_FOUND)
-    target_link_libraries(store_hurst_results PRIVATE libpqxx::pqxx)
-else()
-    find_package(PkgConfig REQUIRED)
-    pkg_check_modules(PQXX REQUIRED IMPORTED_TARGET libpqxx)
-    target_link_libraries(store_hurst_results PRIVATE PkgConfig::PQXX)
+    if(libpqxx_FOUND)
+        target_link_libraries(store_hurst_results PRIVATE libpqxx::pqxx)
+    else()
+        find_package(PkgConfig REQUIRED)
+        pkg_check_modules(PQXX REQUIRED IMPORTED_TARGET libpqxx)
+        target_link_libraries(store_hurst_results PRIVATE PkgConfig::PQXX)
+    endif()
 endif()
