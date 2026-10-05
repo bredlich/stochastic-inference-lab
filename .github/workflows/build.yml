@@ -57,6 +57,21 @@ jobs:
               interpretation TEXT,
               created_at TIMESTAMP DEFAULT NOW()
           );
+          CREATE TABLE ar1_validation_results (
+              id SERIAL PRIMARY KEY,
+              true_phi DOUBLE PRECISION,
+              estimated_phi DOUBLE PRECISION,
+              absolute_error DOUBLE PRECISION,
+              created_at TIMESTAMP DEFAULT NOW()
+          );
+          CREATE TABLE ar1_ftse_results (
+              id SERIAL PRIMARY KEY,
+              estimated_c DOUBLE PRECISION,
+              estimated_phi DOUBLE PRECISION,
+              rmse_ar1 DOUBLE PRECISION,
+              rmse_naive DOUBLE PRECISION,
+              created_at TIMESTAMP DEFAULT NOW()
+          );
           "
 
       - name: Build all project subfolders
@@ -73,6 +88,12 @@ jobs:
         run: |
           cd hurst_estimation
           ./build/hurst
+          python load_results.py
+
+      - name: Run AR(1) simulator and load results into Postgres
+        run: |
+          cd ar1
+          ./build/ar1
           python load_results.py
 
       - name: Run all test executables
