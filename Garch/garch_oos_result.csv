@@ -1,0 +1,2 @@
+train_n,test_n,qlike_garch,qlike_constant,mse_garch,mse_constant
+530,228,-8.89402,-8.81385,1.0141e-08,1.02414e-08
