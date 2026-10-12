@@ -72,6 +72,40 @@ jobs:
               rmse_naive DOUBLE PRECISION,
               created_at TIMESTAMP DEFAULT NOW()
           );
+          CREATE TABLE garch_validation_results (
+              id SERIAL PRIMARY KEY,
+              true_alpha DOUBLE PRECISION,
+              estimated_alpha DOUBLE PRECISION,
+              true_beta DOUBLE PRECISION,
+              estimated_beta DOUBLE PRECISION,
+              true_persistence DOUBLE PRECISION,
+              estimated_persistence DOUBLE PRECISION,
+              absolute_error_persistence DOUBLE PRECISION,
+              created_at TIMESTAMP DEFAULT NOW()
+          );
+          CREATE TABLE garch_ftse_results (
+              id SERIAL PRIMARY KEY,
+              estimated_omega DOUBLE PRECISION,
+              estimated_alpha DOUBLE PRECISION,
+              estimated_beta DOUBLE PRECISION,
+              persistence DOUBLE PRECISION,
+              half_life_days DOUBLE PRECISION,
+              long_run_vol_annual DOUBLE PRECISION,
+              current_vol_annual DOUBLE PRECISION,
+              one_year_forecast_vol_annual DOUBLE PRECISION,
+              log_likelihood DOUBLE PRECISION,
+              created_at TIMESTAMP DEFAULT NOW()
+          );
+          CREATE TABLE garch_oos_results (
+              id SERIAL PRIMARY KEY,
+              train_n INTEGER,
+              test_n INTEGER,
+              qlike_garch DOUBLE PRECISION,
+              qlike_constant DOUBLE PRECISION,
+              mse_garch DOUBLE PRECISION,
+              mse_constant DOUBLE PRECISION,
+              created_at TIMESTAMP DEFAULT NOW()
+          );
           "
 
       - name: Build all project subfolders
@@ -94,6 +128,12 @@ jobs:
         run: |
           cd ar1
           ./build/ar1
+          python load_results.py
+
+      - name: Run GARCH estimator and load results into Postgres
+        run: |
+          cd Garch
+          ./build/garch
           python load_results.py
 
       - name: Run all test executables
