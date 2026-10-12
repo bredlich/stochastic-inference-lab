@@ -1,0 +1,5 @@
+true_alpha,estimated_alpha,true_beta,estimated_beta,true_persistence,estimated_persistence,absolute_error_persistence
+0.05,0.045,0.9,0.906,0.95,0.951,0.001
+0.1,0.122,0.85,0.819,0.95,0.941,0.009
+0.15,0.162,0.8,0.781,0.95,0.943,0.007
+0.05,0.058,0.93,0.927,0.98,0.985,0.005
