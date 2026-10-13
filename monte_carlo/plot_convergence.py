@@ -4,8 +4,11 @@
 # the true closed-form value.
 # Date: 07/09/2026
 
+import os
 import subprocess
 import matplotlib.pyplot as plt
+
+EXE = "build/Debug/monte_carlo.exe" if os.path.exists("build/Debug/monte_carlo.exe") else "build/monte_carlo"
 
 simulation_counts = [100, 1000, 5000, 10000, 50000, 100000, 500000]
 mc_prices = []
@@ -14,7 +17,7 @@ bs_price = None
 for n in simulation_counts:
     # args: K_multiplier r T numSimulations seed
     result = subprocess.run(
-        ["build/Debug/monte_carlo.exe", "1.0", "0.04", "1.0", str(n), "42"],
+        [EXE, "1.0", "0.04", "1.0", str(n), "42"],
         capture_output=True, text=True
     )
     output = result.stdout

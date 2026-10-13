@@ -3,6 +3,7 @@
 # persistent (H>0.5) behaviour side by side.
 # Date: 11/09/2026
 
+import os
 import subprocess
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -13,7 +14,8 @@ labels = ["H = 0.3 (anti-persistent)", "H = 0.5 (standard BM)", "H = 0.7 (persis
 fig, axes = plt.subplots(1, 3, figsize=(15, 4), sharey=True)
 
 for ax, H, label in zip(axes, hurst_values, labels):
-    subprocess.run(["build/Debug/fbm.exe", str(H), "300", "1", "42"])
+    exe = "build/Debug/fbm.exe" if os.path.exists("build/Debug/fbm.exe") else "build/fbm"
+    subprocess.run([exe, str(H), "300", "1", "42"])
     data = pd.read_csv("fbm_paths.csv")
     ax.plot(data["t"], data["path_0"])
     ax.set_title(label)
