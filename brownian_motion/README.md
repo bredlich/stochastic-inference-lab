@@ -11,11 +11,13 @@ This project implements a discrete-time simulation of one or more sample paths o
 **Definition 2.1 (Standard Brownian Motion).** A stochastic process $\{W_t\}_{t \geq 0}$ is a standard Brownian motion if it satisfies the following properties:
 
 1. $W_0 = 0$,
-2. $W_t$ has independent increments: for $0 \leq s < t$, the increment $W_t - W_s$ is independent of $\{W_u : u \leq s\}$,
+2. $W$ has independent increments: for $0 \leq s < t$, the increment $W_t - W_s$ is independent of $\{W_u : u \leq s\}$,
 3. increments are normally distributed: $W_t - W_s \sim \mathcal{N}(0, t-s)$,
-4. $W_t$ has almost surely continuous sample paths.
+4. $W$ has almost surely continuous sample paths [1, 2].
 
-**Remark 1.** Property 3 is the defining feature exploited in the discrete simulation below. The standard deviation of an increment over an interval of length $\Delta t$ scales with $\sqrt{\Delta t}$, not $\Delta t$ itself — this is the origin of Brownian motion's characteristically jagged, nowhere-differentiable sample paths and it is the property that later processes (notably fractional Brownian motion) modify by introducing dependence between increments.
+**Remark 1.** Property 3 is the defining feature exploited in the discrete simulation below. The standard deviation of an increment over an interval of length $\Delta t$ scales with $\sqrt{\Delta t}$, not $\Delta t$ itself. This is the origin of Brownian motion's characteristically jagged, nowhere-differentiable sample paths. It is also the property that later processes (notably fractional Brownian motion) modify by introducing dependence between increments.
+
+### 2.1 Discretisation
 
 ### 2.1 Discretisation
 
@@ -23,7 +25,7 @@ To simulate a path over $[0, T]$, we partition the interval into $n$ steps of eq
 
 $$\Delta t = \frac{T}{n}.$$
 
-By Property 3, each increment is drawn as
+By Properties 2 and 3, the increments are independent and each is drawn as
 
 $$\Delta W_i \sim \mathcal{N}(0, \Delta t), \qquad i = 1, \dots, n,$$
 
@@ -31,7 +33,7 @@ and the discretised path is constructed via the cumulative sum
 
 $$W_{t_i} = W_{t_{i-1}} + \Delta W_i, \qquad W_{t_0} = 0.$$
 
-This is the standard Euler–Maruyama discretisation for a driftless, unit-diffusion process and it converges to a true Wiener process sample path as $n \to \infty$.
+This is the Euler-Maruyama scheme for a driftless, unit-diffusion process. For Brownian motion it has no discretisation error at the grid points, because the simulated values have exactly the joint distribution of a Wiener process there. Between the grid points the path is not defined [3].
 
 ## 3. Implementation
 
@@ -102,3 +104,11 @@ chmod +x run_experiments.sh
 ## 8. Future Work
 
 This project establishes the baseline simulation and reproducibility framework used throughout the remainder of the repository. Direct extensions include geometric Brownian motion and fractional Brownian motion, in which increments are no longer independent but exhibit long-range dependence governed by the Hurst exponent $H$.
+
+## 9. References
+
+[1] S. E. Shreve, *Stochastic Calculus for Finance II: Continuous-Time Models*, Springer, 2004.
+
+[2] I. Karatzas and S. E. Shreve, *Brownian Motion and Stochastic Calculus*, 2nd ed., Springer, 1991.
+
+[3] P. Glasserman, *Monte Carlo Methods in Financial Engineering*, Springer, 2004.
