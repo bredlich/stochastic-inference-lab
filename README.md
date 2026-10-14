@@ -1,5 +1,5 @@
 # stochastic-inference-lab
-C++ simulations of stochastic processes. Extending my background as a statistical programmer into a first-principles understanding of the underlying simulation methods. Includes Python plotting scripts and shell-scripted experiment pipelines.
+C++ simulations of stochastic processes, to build a first-principles understanding of the simulation methods behind decision making in finance, risk and various other data driven fields. Includes Python plotting scripts, Catch2 checks, shell-scripted automation, PostgreSQL loaders and a Docker image.
 
 ## Projects
 
@@ -14,7 +14,7 @@ C++ simulations of stochastic processes. Extending my background as a statistica
 
 ## Running with Docker
 
-The image builds every project and runs its tests, its main program and its plotting scripts. It needs only Docker.
+The image builds each project, runs its tests, programs and plotting scripts.
 
 ```
 docker run --rm -v "$(pwd)/results:/results" ghcr.io/bredlich/stochastic-inference-lab:latest
