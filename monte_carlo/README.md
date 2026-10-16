@@ -92,7 +92,7 @@ Five automated unit tests (Catch2) verify: correct extraction of $S_0$ and a str
 
 **Shared assumptions.** Monte Carlo and Black-Scholes both assume GBM, so a match in their prices shows that the simulation is implemented correctly. It does not show that GBM describes the FTSE 100.
 
-**Sampling error.** The Monte Carlo price is an estimate that changes with $N$ and the seed. The baseline result differs from Black-Scholes by 1.06 (0.15%) at $N = 100{,}000$. The project reports no standard error for it.
+**Sampling error.** The Monte Carlo price is an estimate that changes with $N$ and the seed. The baseline result differs from Black-Scholes by 1.06 (0.15%) at $N = 100{,}000$.
 
 ## 7. Reproducing this Project
 
@@ -126,7 +126,7 @@ chmod +x run_monte_carlo_simulations.sh
 
 ## 8. Future Work
 
-The volatility estimate used here is a single, static value calculated over the sample window and the increments driving the underlying price process are independent of one another, a direct consequence of the GBM assumption in Definition 2.2. The next project in this repository asks what changes when that independence assumption is dropped, fractional Brownian motion introduces long-range dependence between increments, governed by the Hurst exponent.
+The volatility estimate used here is a single, static value calculated over the sample window and the increments driving the underlying price process are independent of one another, a direct consequence of the GBM assumption in Definition 2.2. The next project in this repository asks what changes when that independence assumption is dropped.
 
 ## 9. References
 
