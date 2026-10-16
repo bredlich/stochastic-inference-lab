@@ -2,9 +2,9 @@
 
 ## 1. Motivation
 
-This project extends the standard Brownian motion generator into a genuinely applied setting: pricing a real financial derivative on real market data. Rather than working with an illustrative asset, all parameters ($S_0$, $\sigma$) are estimated directly from historical FTSE 100 closing prices.
+This project extends the standard Brownian motion generator into an applied setting: pricing a financial derivative on market data. Rather than working with an illustrative asset, all parameters ($S_0$, $\sigma$) are estimated directly from historical FTSE 100 closing prices.
 
-Two independent methods are used to arrive at the same price: Monte Carlo simulation of the underlying price process, and the closed-form Black-Scholes formula. Agreement between them gives us evidence that the simulation is correctly implemented.
+Two independent methods are used to arrive at the same price: Monte Carlo simulation of the underlying price process and the closed form Black-Scholes formula. A closeness in price between them gives us evidence that the simulation is correctly implemented.
 
 ## 2. Basic Definitions
 
@@ -12,17 +12,17 @@ Two independent methods are used to arrive at the same price: Monte Carlo simula
 
 $$\text{Payoff} = \max(S_T - K, 0),$$
 
-where $S_T$ is the price of the underlying asset at time $T$. The option has value only if the asset finishes above the strike.
+where $S_T$ is the price of the underlying asset at time $T$. The option has value only if the asset finishes above the strike [1].
 
 **Definition 2.2 (Geometric Brownian Motion).** A stochastic process $\{S_t\}_{t \geq 0}$ follows geometric Brownian motion if it satisfies the stochastic differential equation
 
 $$dS_t = \mu S_t \, dt + \sigma S_t \, dW_t,$$
 
-where $\mu$ is the drift, $\sigma$ is the volatility, and $W_t$ is a standard Brownian motion (see the Brownian motion project's Definition 2.1). GBM is the standard model for asset prices, chosen because it guarantees $S_t > 0$ for all $t$, a property a plain Brownian motion price model would not have, and because its log-returns are normally distributed, consistent with empirical observations of many real asset prices over short horizons.
+where $\mu$ is the drift, $\sigma$ is the volatility, and $W_t$ is a standard Brownian motion (see the Brownian motion project's Definition 2.1). GBM is the standard model for asset prices, chosen because it guarantees $S_t > 0$ for all $t$, a property a plain Brownian motion price model would not have and because its log-returns are normally distributed, consistent with empirical observations of many real asset prices over short horizons.
 
-**Definition 2.3 (Risk-Neutral Measure).** For pricing purposes, an asset's real-world drift $\mu$ is replaced by the risk-free rate $r$. This is the risk-neutral measure: under it, the expected return on every asset equals the risk-free rate, and the price of any derivative can be computed as the discounted expectation of its payoff. This substitution is what allows an option to be priced without needing to know or estimate the asset's true real-world expected return, only its volatility.
+**Definition 2.3 (Risk-Neutral Measure).** For pricing purposes, an asset's real-world drift $\mu$ is replaced by the risk-free rate $r$. This is the risk-neutral measure: under it, the expected return on every asset equals the risk free rate and the price of any derivative can be computed as the discounted expectation of its payoff. This substitution is what allows an option to be priced without needing to know or estimate the asset's true real-world expected return, only its volatility [1].
 
-**Remark 1 (Black-Scholes Assumptions).** The closed-form Black-Scholes formula used for comparison in this project assumes: the underlying follows GBM with constant volatility $\sigma$; the risk-free rate $r$ is constant; markets are frictionless (no transaction costs, unlimited borrowing/lending at $r$); and the option is European (exercisable only at maturity). Real markets violate several of these assumptions. Within this project, these assumptions are treated as a simplifying baseline against which the Monte Carlo method is validated.
+**Remark 1 (Black-Scholes Assumptions).** The closed-form Black-Scholes formula used for comparison in this project assumes: the underlying follows GBM with constant volatility $\sigma$; the risk-free rate $r$ is constant; markets are frictionless (no transaction costs, unlimited borrowing/lending at $r$); and the option is European (exercisable only at maturity). Real markets violate several of these assumptions. Within this project, these assumptions are treated as a simplifying baseline against which the Monte Carlo method is validated [2].
 
 ## 3. Mathematical Method
 
@@ -32,7 +32,7 @@ Given a series of daily closing prices $P_0, \dots, P_n$, the daily log return i
 
 $$r_i = \ln\left(\frac{P_i}{P_{i-1}}\right).$$
 
-The annualised volatility is the sample standard deviation of these returns, scaled by the square root of the number of trading days in a year:
+The annualised volatility is the sample standard deviation of these returns, scaled by the square root of the number of trading days in a year [3]:
 
 $$\sigma = \text{sd}(r_i) \times \sqrt{252}.$$
 
@@ -40,13 +40,13 @@ $S_0$ is taken as the most recent closing price in the dataset.
 
 ### 3.2 Simulating the Terminal Price
 
-Under the risk-neutral measure, the exact solution to the GBM SDE (Definition 2.2) gives the terminal price directly, without needing to simulate the full path:
+Under the risk-neutral measure, the exact solution to the GBM SDE (Definition 2.2) gives the terminal price directly, without needing to simulate the full path [4]:
 
 $$S_T = S_0 \exp\left[\left(r - \tfrac{1}{2}\sigma^2\right)T + \sigma W_T\right], \qquad W_T \sim \mathcal{N}(0, T).$$
 
 ### 3.3 Monte Carlo Pricing
 
-For $N$ independent simulated terminal prices $S_T^{(1)}, \dots, S_T^{(N)}$, the Monte Carlo price estimate is the discounted average payoff:
+For $N$ independent simulated terminal prices $S_T^{(1)}, \dots, S_T^{(N)}$, the Monte Carlo price estimate is the discounted average payoff [4]:
 
 $$\hat{C} = e^{-rT} \cdot \frac{1}{N} \sum_{i=1}^{N} \max\left(S_T^{(i)} - K, 0\right).$$
 
@@ -56,7 +56,7 @@ By the law of large numbers, $\hat{C} \to C$ (the true price) as $N \to \infty$.
 
 $$C = S_0 \, \Phi(d_1) - K e^{-rT} \, \Phi(d_2), \qquad d_1 = \frac{\ln(S_0/K) + (r + \sigma^2/2)T}{\sigma\sqrt{T}}, \qquad d_2 = d_1 - \sigma\sqrt{T},$$
 
-where $\Phi$ is the standard normal cumulative distribution function.
+where $\Phi$ is the standard normal cumulative distribution function [2].
 
 ## 4. Results
 
@@ -74,17 +74,27 @@ Using $S_0$ and $\sigma$ estimated from real FTSE 100 data (Section 3.1), an at-
 
 ![Figure 1: Monte Carlo convergence to the Black-Scholes price](mc_convergence.png)
 
-**Figure 1.** Monte Carlo price estimate as a function of the number of simulated paths (log scale), against the fixed Black-Scholes price (red dashed line). At low simulation counts the estimate exhibits substantial sampling noise, consistent with the $O(1/\sqrt{N})$ convergence rate of Monte Carlo methods; by $N \approx 10^5$, the estimate has visibly settled onto the true price, providing direct visual evidence of convergence rather than a single-point comparison alone.
+**Figure 1.** Monte Carlo price estimate as a function of the number of simulated paths (log scale), against the fixed Black-Scholes price (red dashed line). At low simulation counts the estimate exhibits substantial sampling noise, consistent with the $O(1/\sqrt{N})$ convergence rate of Monte Carlo methods [4]; by $N \approx 10^5$, the estimate has visibly settled onto the true price, providing direct visual evidence of convergence rather than a single-point comparison alone.
 
 ### 4.3 Pricing Across Strikes
 
-The pricer was also run across a range of strikes (90%–110% of $S_0$), confirming Monte Carlo and Black-Scholes agree closely across moneyness levels, not only at-the-money, and that the resulting prices decrease monotonically in $K$, consistent with option pricing theory.
+The pricer was also run across a range of strikes (90%–110% of $S_0$), confirming Monte Carlo and Black-Scholes agree closely across moneyness levels, not only at-the-money and that the resulting prices decrease monotonically in $K$, consistent with option pricing theory.
 
 ## 5. Verification
 
 Five automated unit tests (Catch2) verify: correct extraction of $S_0$ and a strictly positive $\sigma$ from a known price series; Monte Carlo agreement with Black-Scholes within a fixed tolerance at high $N$; reproducibility under a fixed seed; and correct limiting behaviour for deep in-the-money and deep out-of-the-money options.
 
-## 6. Reproducing this Project
+## 6. Limitations
+
+**Constant volatility.** The volatility $\sigma$ is one number estimated from the sample window and held fixed for the whole year. Real volatility changes over time, so the prices describe that window and not the future.
+
+**Model price only.** No traded option prices are used. The strike, maturity and risk-free rate ($K = S_0$, $T = 1$ year, $r = 4\%$) are chosen by hand. The model also ignores dividends. The result is a model price for a hypothetical call and cannot be compared directly with a market quote.
+
+**Shared assumptions.** Monte Carlo and Black-Scholes both assume GBM, so a match in their prices shows that the simulation is implemented correctly. It does not show that GBM describes the FTSE 100.
+
+**Sampling error.** The Monte Carlo price is an estimate that changes with $N$ and the seed. The baseline result differs from Black-Scholes by 1.06 (0.15%) at $N = 100{,}000$. The project reports no standard error for it.
+
+## 7. Reproducing this Project
 
 **Building:**
 ```
@@ -114,6 +124,16 @@ chmod +x run_monte_carlo_simulations.sh
 ./run_monte_carlo_simulations.sh
 ```
 
-## 7. Future Work
+## 8. Future Work
 
-The volatility estimate used here is a single, static value calculated over the sample window, and the increments driving the underlying price process are independent of one another, a direct consequence of the GBM assumption in Definition 2.2. The next project in this repository asks what changes when that independence assumption is dropped, fractional Brownian motion introduces long-range dependence between increments, governed by the Hurst exponent.
+The volatility estimate used here is a single, static value calculated over the sample window and the increments driving the underlying price process are independent of one another, a direct consequence of the GBM assumption in Definition 2.2. The next project in this repository asks what changes when that independence assumption is dropped, fractional Brownian motion introduces long-range dependence between increments, governed by the Hurst exponent.
+
+## 9. References
+
+[1] S. E. Shreve, *Stochastic Calculus for Finance II: Continuous-Time Models*, Springer, 2004.
+
+[2] F. Black and M. Scholes, "The Pricing of Options and Corporate Liabilities", *Journal of Political Economy*, 81(3), 637 to 654, 1973.
+
+[3] S.-H. Poon and C. W. J. Granger, "Forecasting Volatility in Financial Markets: A Review", *Journal of Economic Literature*, 41(2), 478 to 539, 2003.
+
+[4] P. Glasserman, *Monte Carlo Methods in Financial Engineering*, Springer, 2004.
