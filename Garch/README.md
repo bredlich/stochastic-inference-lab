@@ -90,7 +90,7 @@ The errors in $\alpha$ and $\beta$ tend to have opposite signs within the same f
 
 ### 4.2 FTSE 100
 
-The lag 1 autocorrelation of returns is 0.0058, which matches the AR(1) coefficient of 0.00575 from the earlier project. The lag 1 autocorrelation of squared returns is 0.524. At lags 2 to 4 it is about 0.30, 0.29 and 0.19. It falls to the edge of the 95 percent band of $\pm 0.071$ by about lag 5. So the first hypothesis holds.
+The lag 1 autocorrelation of returns is 0.0058, which matches the AR(1) coefficient of 0.00575 from the earlier project. The lag 1 autocorrelation of squared returns is 0.526. At lags 2 to 4 it is about 0.30, 0.29 and 0.19. It falls to the edge of the 95 percent band of $\pm 0.071$ by about lag 5. So the first hypothesis holds.
 
 | Quantity | Value |
 |---|---|
