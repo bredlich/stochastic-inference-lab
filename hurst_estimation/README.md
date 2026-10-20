@@ -16,9 +16,9 @@ The range and sample standard deviation of the increments are
 
 $$R(n) = \max_{1 \le k \le n} Z_k - \min_{1 \le k \le n} Z_k, \qquad S(n) = \sqrt{\frac{1}{n-1}\sum_{i=1}^{n}(X_i - \bar{X})^2}.$$
 
-The rescaled range statistic is $R(n)/S(n)$.
+The rescaled range statistic is $R(n)/S(n)$ [1].
 
-**Remark 1.** Hurst originally developed this statistic studying the Nile's water levels, well before fractional Brownian motion was formalised mathematically; the connection to $H$ (Definition 2.2 below) was established afterward.
+**Remark 1.** Hurst originally developed this statistic studying the Nile's water levels [1], well before fractional Brownian motion was formalised mathematically; the connection to $H$ (Definition 2.2 below) was established afterward [2].
 
 **Definition 2.2 (The Hurst Relationship).** For a process with self-similarity parameter $H$ (fractional Brownian motion, Definition 3.2 of the previous project), the expected rescaled range scales as
 
@@ -28,13 +28,13 @@ for some constant $c$. Taking logarithms gives a linear relationship
 
 $$\log\left(\frac{R(n)}{S(n)}\right) \approx \log(c) + H \log(n),$$
 
-so that computing $R(n)/S(n)$ across several window sizes $n$ and fitting a straight line to $\log(n)$ against $\log(R/S)$ yields an estimate of $H$ as the fitted slope.
+so that computing $R(n)/S(n)$ across several window sizes $n$ and fitting a straight line to $\log(n)$ against $\log(R/S)$ yields an estimate of $H$ as the fitted slope [2].
 
-**Remark 2.** This is a moment-based estimator, not a maximum-likelihood one and it is known to carry a systematic bias toward $H=0.5$ at extreme true values, since the asymptotic relationship in Definition 2.2 is only exact as $n \to \infty$, while any real series has finite length. This bias is visible in the validation results below and is discussed rather than hidden.
+**Remark 2.** This is a moment-based estimator, not a maximum-likelihood one and it is known to carry a systematic bias toward $H=0.5$ at extreme true values, since the asymptotic relationship in Definition 2.2 is only exact as $n \to \infty$, while any real series has finite length [3]. This bias is visible in the validation results below and is discussed rather than hidden.
 
 ## 3. Method
 
-For a given series, the rescaled range is computed within non-overlapping windows of a fixed size $n$, averaged across all such windows and this is repeated across a range of window sizes spaced logarithmically from small to large. A least-squares line is then fitted to $\log(n)$ against $\log(R/S)$; its slope is the Hurst exponent estimate.
+For a given series, the rescaled range is computed within non-overlapping windows of a fixed size $n$, averaged across all such windows and this is repeated across a range of window sizes spaced logarithmically from small to large [2]. A least-squares line is then fitted to $\log(n)$ against $\log(R/S)$; its slope is the Hurst exponent estimate.
 
 **Part A (validation):** fBm sample paths are generated via the Cholesky method at four known values, $H \in \{0.3, 0.5, 0.7, 0.9\}$, and the estimator is applied to each path's increments, checking recovery against the known ground truth.
 
@@ -53,7 +53,7 @@ For a given series, the rescaled range is computed within non-overlapping window
 
 ![Figure 1: Validation of the Hurst estimator against known ground truth](hurst_validation.png)
 
-**Figure 1.** Estimated Hurst exponent plotted against the true value used to generate each synthetic fBm path, against the line of perfect recovery. The estimator is most accurate near $H=0.7$ and shows the expected systematic bias toward $0.5$ at the extremes ($H=0.3$ estimated too high, $H=0.9$ estimated too low), consistent with Remark 2. This bias is a documented property of R/S analysis with finite sample sizes and not an implementation error.
+**Figure 1.** Estimated Hurst exponent plotted against the true value used to generate each synthetic fBm path, against the line of perfect recovery. The estimator is most accurate near $H=0.7$ and shows the expected systematic bias toward $0.5$ at the extremes ($H=0.3$ estimated too high, $H=0.9$ estimated too low), consistent with Remark 2. This bias is a documented property of R/S analysis with finite sample sizes [3] and not an implementation error.
 
 ### 4.2 The Estimation Mechanism
 
@@ -70,13 +70,13 @@ Five automated unit tests (Catch2) verify: the linear regression routine exactly
 
 ## 6. Limitations
 
-**Finite sample bias.** R/S analysis is biased on series of finite length (Remark 2). At a true $H = 0.5$ the estimator returned 0.560 and the errors in Section 4.1 range from 0.004 to 0.091.
+**Finite sample bias.** R/S analysis is biased on series of finite length [3], as noted in Remark 2. At a true $H = 0.5$ the estimator returned 0.560 and the errors in Section 4.1 range from 0.004 to 0.091.
 
 **One path per value of $H$.** Each row of the validation table comes from one simulated path. The errors are single draws and this project does not measure their sampling variability.
 
 **No uncertainty on the FTSE estimate.** The FTSE 100 estimate of 0.569 has no standard error or significance test. It is close to the 0.560 returned for a series with true $H = 0.5$, so this evidence does not separate the index from a random walk.
 
-**Estimator choice.** The window sizes are fixed and the project does not test how the estimate changes when they change. No other estimator is compared. R/S analysis can also be inflated by short-range dependence and volatility clustering, so a value above 0.5 does not by itself show long memory.
+**Estimator choice.** The window sizes are fixed and the project does not test how the estimate changes when they change. No other estimator is compared. R/S analysis is also sensitive to short-range dependence [4], so a value above 0.5 does not by itself show long memory.
 
 **Data.** The FTSE 100 file holds about 758 daily returns from one index over a window of roughly three years. The result says nothing about other indices or longer periods. Treating log returns as increments of fBm is an assumption.
 
@@ -114,3 +114,13 @@ chmod +x run_hurst_simulations.sh
 ## 8. Future Work
 
 This project shows that long memory can be estimated from a series, with the limits set out above. The natural next question is what else the FTSE 100 returns contain. Does one return depend on the one before it? Does the size of the moves change over time? An AR(1) model could describe the first and a GARCH model the second. Each could be checked on synthetic data with known parameters before being fitted to the same FTSE 100 returns.
+
+## 9. References
+
+[1] H. E. Hurst, "Long-Term Storage Capacity of Reservoirs", *Transactions of the American Society of Civil Engineers*, 116(1), 770 to 799, 1951.
+
+[2] B. B. Mandelbrot and J. R. Wallis, "Robustness of the Rescaled Range R/S in the Measurement of Noncyclic Long Run Statistical Dependence", *Water Resources Research*, 5(5), 967 to 988, 1969.
+
+[3] A. A. Anis and E. H. Lloyd, "The Expected Value of the Adjusted Rescaled Hurst Range of Independent Normal Summands", *Biometrika*, 63(1), 111 to 116, 1976.
+
+[4] A. W. Lo, "Long-Term Memory in Stock Market Prices", *Econometrica*, 59(5), 1279 to 1313, 1991.
