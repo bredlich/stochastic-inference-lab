@@ -34,7 +34,7 @@ fBm satisfies this exactly: a portion of the path, rescaled, is statistically in
 
 ### 3.3 On the Name: Fractional and Fractal
 
-The term fractional in fractional Brownian motion derives historically from fractional calculus, which generalises ordinary derivatives and integrals to non-integer orders; fBm's construction is tied to a fractional-order integral of white noise [2]. The word fractal, coined separately by Benoit Mandelbrot, refers to self-similarity, the property in Definition 3.2. Despite arriving from different directions, the two are directly connected: fBm is a fractal process, and Mandelbrot himself used fractional Brownian motion specifically to model naturally occurring, self-similar phenomena. This includes coastlines and river networks, as well as financial price series [2]. The Hurst parameter $H$ governs both the long-memory behaviour discussed below and the fractal dimension of the resulting path simultaneously.
+The term fractional in fractional Brownian motion derives historically from fractional calculus, which generalises ordinary derivatives and integrals to non-integer orders; fBm's construction is tied to a fractional-order integral of white noise [2]. The word fractal, coined separately by Benoit Mandelbrot, refers to self-similarity, the property in Definition 3.2. Despite arriving from different directions, the two are directly connected: fBm is a fractal process and Mandelbrot himself used fractional Brownian motion specifically to model naturally occurring, self-similar phenomena. This includes coastlines and river networks, as well as financial price series [2]. The Hurst parameter $H$ governs both the long-memory behaviour discussed below and the fractal dimension of the resulting path simultaneously.
 
 **Definition 3.4 (Long-Range Dependence).** For $H > 1/2$, the autocorrelation of increments decays slowly enough that $\sum_{k=1}^{\infty} \rho(k) = \infty$, termed long-range dependence or long memory. For $H < 1/2$, increments are negatively correlated; for $H = 1/2$, independent [1].
 
@@ -109,7 +109,7 @@ chmod +x run_fbm_simulations.sh
 
 ## 9. Future Work
 
-This project shows that fBm can be simulated for a chosen, known value of $H$. The natural next question is the inverse problem. Given only a price series, can the Hurst exponent be recovered from the data? An estimator could first be checked against the known values of $H$ simulated here, and then applied to FTSE 100 closing prices to ask whether the index behaves like a random walk or shows long memory.
+This project shows that fBm can be simulated for a chosen, known value of $H$. The natural next question is the inverse problem. Given only a price series, can the Hurst exponent be recovered from the data? An estimator could first be checked against the known values of $H$ simulated here and then applied to FTSE 100 closing prices to ask whether the index behaves like a random walk or shows long memory.
 
 ## 10. References
 

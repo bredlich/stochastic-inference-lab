@@ -19,8 +19,6 @@ This project implements a discrete-time simulation of one or more sample paths o
 
 ### 2.1 Discretisation
 
-### 2.1 Discretisation
-
 To simulate a path over $[0, T]$, we partition the interval into $n$ steps of equal width
 
 $$\Delta t = \frac{T}{n}.$$
@@ -45,7 +43,7 @@ The program (`brownian_motion.cpp`) accepts three optional command-line argument
 |---|---|---|
 | `numPaths` | Number of independent sample paths to simulate | 5 |
 | `n` | Number of discretisation steps per path | 500 |
-| `seed` | Fixed seed for the random number generator | none (genuinely random) |
+| `seed` | Fixed seed for the random number generator | none (random) |
 
 When a seed is supplied, the simulation is fully reproducible: an identical seed, path count and step count will always regenerate byte-identical output. This is verified directly by an automated test (Section 5).
 
@@ -53,7 +51,7 @@ When a seed is supplied, the simulation is fully reproducible: an identical seed
 
 ![Figure 1: Simulated standard Brownian motion sample paths](brownian_paths.png)
 
-**Figure 1.** Five independent sample paths of a standard Brownian motion, simulated over $[0, 1]$ with $n = 500$ discretisation steps. Each path is generated independently via the cumulative-sum construction described in Section 2.1, using a shared random number generator across paths. All paths originate at $W_0 = 0$, consistent with Definition 2.1, and exhibit no discernible drift or convergence toward one another, reflecting the independent-increment property of the process. The visible roughness of each path, rather than smooth curvature, is characteristic of Brownian motion's almost-sure non-differentiability and is a direct consequence of increments scaling with $\sqrt{\Delta t}$ rather than $\Delta t$ (Remark 1).
+**Figure 1.** Five independent sample paths of a standard Brownian motion, simulated over $[0, 1]$ with $n = 500$ discretisation steps. Each path is generated independently via the cumulative-sum construction described in Section 2.1, using a shared random number generator across paths. All paths originate at $W_0 = 0$, consistent with Definition 2.1 and exhibit no discernible drift or convergence toward one another, reflecting the independent-increment property of the process. The visible roughness of each path, rather than smooth curvature, is characteristic of Brownian motion's almost-sure non-differentiability and is a direct consequence of increments scaling with $\sqrt{\Delta t}$ rather than $\Delta t$ (Remark 1).
 
 Qualitatively, the simulated paths in Figure 1 exhibit the expected properties of standard Brownian motion: all paths originate at $W_0 = 0$, exhibit no discernible drift and display the continuous but nowhere-smooth character predicted by Definition 2.1. No two paths track one another, consistent with the independent-increment property.
 

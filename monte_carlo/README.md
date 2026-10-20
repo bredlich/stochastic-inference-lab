@@ -18,7 +18,7 @@ where $S_T$ is the price of the underlying asset at time $T$. The option has val
 
 $$dS_t = \mu S_t \, dt + \sigma S_t \, dW_t,$$
 
-where $\mu$ is the drift, $\sigma$ is the volatility, and $W_t$ is a standard Brownian motion (see the Brownian motion project's Definition 2.1). GBM is the standard model for asset prices, chosen because it guarantees $S_t > 0$ for all $t$, a property a plain Brownian motion price model would not have and because its log-returns are normally distributed, consistent with empirical observations of many real asset prices over short horizons.
+where $\mu$ is the drift, $\sigma$ is the volatility and $W_t$ is a standard Brownian motion (see the Brownian motion project's Definition 2.1). GBM is the standard model for asset prices, chosen because it guarantees $S_t > 0$ for all $t$, a property a plain Brownian motion price model would not have and because its log-returns are normally distributed, consistent with empirical observations of many real asset prices over short horizons.
 
 **Definition 2.3 (Risk-Neutral Measure).** For pricing purposes, an asset's real-world drift $\mu$ is replaced by the risk-free rate $r$. This is the risk-neutral measure: under it, the expected return on every asset equals the risk free rate and the price of any derivative can be computed as the discounted expectation of its payoff. This substitution is what allows an option to be priced without needing to know or estimate the asset's true real-world expected return, only its volatility [1].
 
@@ -66,9 +66,9 @@ Using $S_0$ and $\sigma$ estimated from real FTSE 100 data (Section 3.1), an at-
 
 | Method | Price |
 |---|---|
-| Monte Carlo | 717.42 |
+| Monte Carlo (MSVC build) | 717.42 |
 | Black-Scholes | 716.36 |
-| Absolute difference | 1.06 (0.15%) |
+| Absolute difference (MSVC build) | 1.06 (0.15%) |
 
 ### 4.2 Convergence
 
@@ -78,7 +78,7 @@ Using $S_0$ and $\sigma$ estimated from real FTSE 100 data (Section 3.1), an at-
 
 ### 4.3 Pricing Across Strikes
 
-The pricer was also run across a range of strikes (90%–110% of $S_0$), confirming Monte Carlo and Black-Scholes agree closely across moneyness levels, not only at-the-money and that the resulting prices decrease monotonically in $K$, consistent with option pricing theory.
+The pricer was also run across a range of strikes (90%–110% of $S_0$), confirming Monte Carlo and Black-Scholes agree closely across moneyness levels, not only at the money. The resulting prices also decrease monotonically in $K$, consistent with option pricing theory.
 
 ## 5. Verification
 
