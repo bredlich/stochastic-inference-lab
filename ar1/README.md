@@ -56,7 +56,7 @@ The one step ahead forecast is $\hat{X}_{t+1} = \hat{c} + \hat{\phi} X_t$ [1]. I
 
 ![Figure 1: AR(1) sample paths across phi values](ar1_paths.png)
 
-**Figure 1.** AR(1) sample paths at $\phi = -0.7, 0, 0.5, 0.95$, generated with the same random seed. The negative coefficient produces rapid alternation around zero. The case $\phi = 0$ is plain noise, and $\phi = 0.95$ produces long slow swings, consistent with a process close to a random walk (Remark 1).
+**Figure 1.** AR(1) sample paths at $\phi = -0.7, 0, 0.5, 0.95$, generated with the same random seed. The negative coefficient produces rapid alternation around zero. The case $\phi = 0$ is plain noise and $\phi = 0.95$ produces long slow swings, consistent with a process close to a random walk (Remark 1).
 
 ### 4.2 Parameter recovery
 
@@ -82,14 +82,14 @@ Fitting the model to FTSE 100 daily log returns gives
 
 | Quantity | Value |
 |---|---|
-| $\hat{c}$ | 0.000493 |
-| $\hat{\phi}$ | 0.00558 |
-| AR(1) forecast RMSE | 0.0070436 |
-| Naive (zero return) forecast RMSE | 0.0070611 |
+| $\hat{c}$ | 0.000488 |
+| $\hat{\phi}$ | 0.00575 |
+| AR(1) forecast RMSE | 0.0070371 |
+| Naive (zero return) forecast RMSE | 0.0070543 |
 
-The estimated coefficient is indistinguishable from zero. Under the null of white noise [1], the standard error of $\hat{\phi}$ is approximately $1/\sqrt{n} \approx 0.036$ for the roughly 758 daily returns used, so $\hat{\phi}$ lies about 0.15 standard errors from zero.
+The estimated coefficient is indistinguishable from zero. Under the null of white noise [1], the standard error of $\hat{\phi}$ is approximately $1/\sqrt{n} \approx 0.036$ for the roughly 758 daily returns used, so $\hat{\phi}$ lies about 0.16 standard errors from zero.
 
-The AR(1) forecast beats the naive baseline by about 0.25 percent. This is not evidence of predictive skill. The model is scored on the same data it was fitted to, so even this figure is optimistic. With $\hat{\phi} \approx 0$ the forecast is almost constant at $\hat{c}$, the average daily return, so the small gain comes from the drift term and not from any dependence between consecutive days.
+The AR(1) forecast beats the naive baseline by about 0.24 percent. This is not evidence of predictive skill. The model is scored on the same data it was fitted to, so even this figure is optimistic. With $\hat{\phi} \approx 0$ the forecast is almost constant at $\hat{c}$, the average daily return, so the small gain comes from the drift term and not from any dependence between consecutive days.
 
 The finding is that daily FTSE 100 returns show no detectable lag 1 autocorrelation. This is consistent with weak form market efficiency, where past returns carry no usable information about future returns [2].
 
