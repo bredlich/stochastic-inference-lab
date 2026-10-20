@@ -92,9 +92,9 @@ inline std::vector<double> readClosingPrices(const std::string& filename) {
         while (std::getline(ss, cell, ',')) {
             cells.push_back(cell);
         }
-        if (cells.size() >= 2 && !cells[1].empty()) {
+        if (cells.size() >= 5 && !cells[4].empty()) {
             try {
-                prices.push_back(std::stod(cells[1]));
+                prices.push_back(std::stod(cells[4]));
             }
             catch (...) {
                 // skip malformed rows
